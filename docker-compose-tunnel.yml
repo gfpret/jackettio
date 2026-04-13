@@ -94,6 +94,7 @@ services:
   depends_on:
    - stremio_redis
    - stremio_server
+   - stremio_mediaflow
 #  network_mode: "host"
   networks:
    upcinternet:
