@@ -16,18 +16,18 @@ services:
 #   - /bin/ffprobe:/bin/ffprobe:ro
   environment:
    - TZ=Africa/Johannesburg
-#   - CASTING_DISABLED=0
-#   - NO_CORS=1
+   - CASTING_DISABLED=0
+   - NO_CORS=1
 #   - FFMPEG_BIN=/bin/ffmpeg
 #   - FFPROBE_BIN=/bin/ffprobe
 # Uncomment and set value as needed
 #   - APP_PATH=""
-#   - NO_CORS=0data
+#   - NO_CORS=0
   shm_size: 128mb
-#  network_mode: "host"
-  networks:
-   upcinternet:
-    ipv4_address: 10.65.0.16
+  network_mode: "host"
+#  networks:
+#   upcinternet:
+#    ipv4_address: 10.65.0.16
   restart: unless-stopped
   stdin_open: True
   tty: True
@@ -36,9 +36,10 @@ services:
   container_name: stremio_redis
   hostname: stremio_redis
   image: redis:7-alpine
-  networks:
-   upcinternet:
-    ipv4_address: 10.65.0.15
+  network_mode: "host"
+#  networks:
+#   upcinternet:
+#    ipv4_address: 10.65.0.15
   ports:
    - 6379:6379
   volumes:
@@ -60,16 +61,17 @@ services:
    - 8887:8887
   environment:
    - TZ=Africa/Johannesburg
-   - API_PASSWORD=UpcMedFlow
-   - STREMIO_PROXY_URL=http://10.65.0.16:11470
-   - REDIS_URL=redis://10.65.0.15:6379
+#   - API_PASSWORD=UpcMedFlow
+#   - STREMIO_PROXY_URL=http://192.168.66.210:11470
+   - REDIS_URL=redis://192.168.66.210:6379
    - PORT=8887
   depends_on:
     stremio_redis:
      condition: service_healthy
-  networks:
-   upcinternet:
-    ipv4_address: 10.65.0.19
+  network_mode: "host"
+#  networks:
+#   upcinternet:
+#    ipv4_address: 10.65.0.19
   restart: unless-stopped
   stdin_open: True
   tty: True
@@ -87,15 +89,16 @@ services:
   environment:
 #   - NODE_ENV=production
    - CACHE_TYPE=redis
-   - REDIS_HOST=stremio_redis
+   - REDIS_HOST=192.168.66.210
    - DATA_FOLDER=/data
   depends_on:
    - stremio_redis
    - stremio_server
    - stremio_mediaflow-proxy
-  networks:
-   upcinternet:
-    ipv4_address: 10.65.0.20
+  network_mode: "host"
+#  networks:
+#   upcinternet:
+#    ipv4_address: 10.65.0.20
   restart: unless-stopped
   stdin_open: True
   tty: True
@@ -122,6 +125,6 @@ services:
 # stremio_jackettio-data:
 # stremio_redis-data:
 
-networks:
- upcinternet:
-  external: True
+#networks:
+# upcinternet:
+#  external: True
