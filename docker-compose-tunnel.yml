@@ -1,7 +1,130 @@
-version: "3.3"
-
 services:
+ stremio_server:
+  container_name: stremio_server
+  hostname: stremio_server
+  image: stremio/server:latest
+  privileged: true
+  devices:
+   - /dev/dri/renderD128:/dev/dri/renderD128
+   - /dev/dri/card0:/dev/dri/card0
+  ports:
+   - 11470:11470
+   - 12470:12470
+  volumes:
+   - /opt/stremio/server:/root/.stremio-server
+#   - /bin/ffmpeg:/bin/ffmpeg:ro
+#   - /bin/ffprobe:/bin/ffprobe:ro
+  environment:
+   - TZ=Africa/Johannesburg
+   - CASTING_DISABLED=0
+   - NO_CORS=1
+#   - FFMPEG_BIN=/bin/ffmpeg
+#   - FFPROBE_BIN=/bin/ffprobe
+# Uncomment and set value as needed
+#   - APP_PATH=""
+#   - NO_CORS=0
+  shm_size: 128mb
+  network_mode: "host"
+#  networks:
+#   upcinternet:
+#    ipv4_address: 10.65.0.16
+  restart: unless-stopped
+  stdin_open: True
+  tty: True
 
-  jackett:
-    ports:
-      - 9117:9117
+ stremio_redis:
+  container_name: stremio_redis
+  hostname: stremio_redis
+  image: redis:7-alpine
+#  network_mode: "host"
+  networks:
+   upcinternet:
+    ipv4_address: 10.65.0.17
+  ports:
+   - 6379:6379
+  volumes:
+   - /opt/stremio/redis/data:/data
+  restart: unless-stopped
+  healthcheck:
+   test: ["CMD", "redis-cli", "ping"]
+   interval: 10s
+   timeout: 5s
+   retries: 5
+  stdin_open: True
+  tty: True
+
+ stremio_mediaflow-proxy:
+  container_name: stremio_mediaflow-proxy
+  hostname: stremio_mediaflow-proxy
+  image: mhdzumair/mediaflow-proxy
+  ports:
+   - 8887:8887
+  environment:
+   - TZ=Africa/Johannesburg
+   - API_PASSWORD=UpcMedFlow
+   - STREMIO_PROXY_URL=http://192.168.66.210:11470
+   - REDIS_URL=redis://10.65.0.17:6379
+   - PORT=8887
+  depends_on:
+    stremio_redis:
+     condition: service_healthy
+#  network_mode: "host"
+  networks:
+   upcinternet:
+    ipv4_address: 10.65.0.18
+  restart: unless-stopped
+  stdin_open: True
+  tty: True
+
+ stremio_jackettio:
+  container_name: stremio_jackettio
+  hostname: stremio_jackettio
+  image: arvida42/jackettio:latest
+  env_file:
+   - /opt/stremio/jackettio/.env
+  ports:
+   - 4000:4000
+  volumes:
+   - /opt/stremio/jackettio/data:/data
+  environment:
+   - NODE_ENV=production
+   - CACHE_TYPE=redis
+   - REDIS_HOST=redis://10.65.0.17:6379
+   - DATA_FOLDER=/data
+  depends_on:
+   - stremio_redis
+   - stremio_server
+   - stremio_mediaflow-proxy
+#  network_mode: "host"
+  networks:
+   upcinternet:
+    ipv4_address: 10.65.0.19
+  restart: unless-stopped
+  stdin_open: True
+  tty: True
+
+# stremio_nginx:
+#  container_name: stremio_nginx
+#  hostname: stremio_nginx
+#  image: nginx:alpine
+#  ports:
+#   - 10443:443
+#  volumes:
+#   - /opt/stremio/default.conf:/etc/nginx/conf.d/default.conf
+#   - /opt/stremio/cert:/ssl
+#  depends_on:
+#      - stremio_server
+#  networks:
+#   upcinternet:
+#    ipv4_address: 10.65.0.17
+#  restart: unless-stopped
+#  stdin_open: True
+#  tty: True
+
+#volumes:
+# stremio_jackettio-data:
+# stremio_redis-data:
+
+networks:
+ upcinternet:
+  external: True
