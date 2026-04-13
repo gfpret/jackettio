@@ -16,8 +16,8 @@ services:
 #   - /bin/ffprobe:/bin/ffprobe:ro
   environment:
    - TZ=Africa/Johannesburg
-   - CASTING_DISABLED=0
-   - NO_CORS=1
+#   - CASTING_DISABLED=0
+#   - NO_CORS=1
 #   - FFMPEG_BIN=/bin/ffmpeg
 #   - FFPROBE_BIN=/bin/ffprobe
 # Uncomment and set value as needed
@@ -88,8 +88,8 @@ services:
    - /opt/stremio/jackettio/data:/data
   environment:
    - NODE_ENV=production
-   - CACHE_TYPE=redis
-   - REDIS_HOST=redis://10.65.0.17:6379
+#   - CACHE_TYPE=redis
+#   - REDIS_HOST=redis://10.65.0.17:6379
    - DATA_FOLDER=/data
   depends_on:
    - stremio_redis
