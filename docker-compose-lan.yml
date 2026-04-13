@@ -96,15 +96,15 @@ services:
    - stremio_server
    - stremio_mediaflow-proxy
    - stremio_traefik
-  network_mode: "host"
-#  networks:
-#   upcinternet:
-#    ipv4_address: 10.65.0.20
+#  network_mode: "host"
+  networks:
+   upcinternet:
+    ipv4_address: 10.65.0.19
   labels:
    - "traefik.enable=true"
-   - "traefik.docker.network=jackettio_traefik"
+   - "traefik.docker.network=upcinternet"
    - "traefik.http.routers.jackettio.entrypoints=web,websecure"
-   - "traefik.http.routers.jackettio.rule=Host(`${ACME_DOMAIN:-}`)"
+   - "traefik.http.routers.jackettio.rule=Host(`jackettio.gfphome.duckdns.org`)"
    - "traefik.http.routers.jackettio.tls=true"
    - "traefik.http.routers.jackettio.tls.certresolver=letsencryptresolver"
   restart: unless-stopped
@@ -131,7 +131,7 @@ services:
    - "443:443"
   volumes:
       # To persist certificates
-   - /opt/stremio/jackettio/letsencrypt:/letsencrypt
+   - /opt/stremio/letsencrypt:/letsencrypt
 #   - letsencrypt:/letsencrypt
       # So that Traefik can listen to the Docker events
    - "/var/run/docker.sock:/var/run/docker.sock:ro"
@@ -139,10 +139,10 @@ services:
    - stremio_redis
    - stremio_server
    - stremio_mediaflow-proxy
-  network_mode: "host"
-#  networks:
-#   upcinternet:
-#    ipv4_address: 10.65.0.20
+#  network_mode: "host"
+  networks:
+   upcinternet:
+    ipv4_address: 10.65.0.20
   restart: unless-stopped
   stdin_open: True
   tty: True
