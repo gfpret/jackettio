@@ -16,14 +16,14 @@ fi
 COMMAND="$1"
 RAW_GITHUB_URL="https://raw.githubusercontent.com/gfpret/jackettio/master"
 DIR=$(dirname "$0")
-ENV_FILE="$DIR/.env.production"
+ENV_FILE="$DIR/.env"
 JACKETT_PASSWORD=""
 
 ACME_DOMAIN=""
 ACME_EMAIL=""
 INSTALL_TYPE=""
 LOCALTUNNEL=""
-JACKETT_URL="http://jackett:9117"
+JACKETT_URL="http://jackettio_jackett:9117"
 JACKETT_API_KEY=""
 PORT=4000
 COMPOSE_FILE=""
