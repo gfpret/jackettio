@@ -2,7 +2,7 @@ services:
  jackettio_flaresolverr:
   container_name: jackettio_flaresolverr
   hostname: jackettio_flaresolverr
-  image: ghcr.io/flaresolverr/flaresolverr:latest
+  image: flaresolverr/flaresolverr:latest
   ports:
    - 8191:8191
   environment:
