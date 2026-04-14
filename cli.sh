@@ -243,7 +243,7 @@ fi
 downloadComposeFiles
 
 echo "Configure jackett ..."
-runDockerCompose up -d jackett
+runDockerCompose up -d jackettio_jackett
 echo "Wait for jackett ..."
 sleep 6
 docker cp jackettio_jackett:/config/Jackett/ServerConfig.json /tmp/ServerConfig.json > /dev/null
