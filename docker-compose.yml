@@ -21,7 +21,7 @@ services:
  jackettio_jackett:
   container_name: jackettio_jackett
   hostname: jackettio_jackett
-  image: lscr.io/linuxserver/jackett:latest
+  image: linuxserver/jackett:latest
   ports:
    - 9117:9117
   environment:
