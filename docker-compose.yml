@@ -9,6 +9,8 @@ services:
    - LOG_LEVEL=${LOG_LEVEL:-info}
    - LOG_HTML=${LOG_HTML:-false}
    - CAPTCHA_SOLVER=${CAPTCHA_SOLVER:-none}
+  volumes:
+   - /opt/jackettio/flaresolverr:/config
   networks:
    upcinternet:
     ipv4_address: 10.65.0.18
