@@ -6,6 +6,6 @@ services:
     ports:
       - 4000:4000
 
-  jackett:
+  jackettio_jackett:
     ports:
       - 9117:9117
