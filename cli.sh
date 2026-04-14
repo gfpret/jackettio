@@ -139,12 +139,12 @@ case "$COMMAND" in
         ;;
     "jackett-password")
         importConfig
-        docker cp jackett:/config/Jackett/ServerConfig.json /tmp/ServerConfig.json > /dev/null
+        docker cp jackettio_jackett:/config/Jackett/ServerConfig.json /tmp/ServerConfig.json > /dev/null
         createJackettPassword /tmp/ServerConfig.json
-        docker cp /tmp/ServerConfig.json jackett:/config/Jackett/ServerConfig.json > /dev/null
+        docker cp /tmp/ServerConfig.json jackettio_jackett:/config/Jackett/ServerConfig.json > /dev/null
         rm -f /tmp/ServerConfig.json
         echo "Restart jackett ..."
-        docker restart jackett
+        docker restart jackettio_jackett
         echo "Your new password is: $JACKETT_PASSWORD"
         echo "Please change it for security in jackett dashboard"
         exit 0
@@ -246,7 +246,7 @@ echo "Configure jackett ..."
 runDockerCompose up -d jackett
 echo "Wait for jackett ..."
 sleep 6
-docker cp jackett:/config/Jackett/ServerConfig.json /tmp/ServerConfig.json > /dev/null
+docker cp jackettio_jackett:/config/Jackett/ServerConfig.json /tmp/ServerConfig.json > /dev/null
 JACKETT_API_KEY=$(sed -n 's/.*"APIKey": "\(.*\)",/\1/p' /tmp/ServerConfig.json)
 JACKETT_PASSWORD_HASH=$(sed -n 's/.*"AdminPassword": "\(.*\)",/\1/p' /tmp/ServerConfig.json)
 
@@ -257,7 +257,7 @@ fi
 
 echo " - Configure jackett flaresolverr url ..."
 sedReplace 's/"FlareSolverrUrl": .*,/"FlareSolverrUrl": "http:\/\/flaresolverr:8191",/' /tmp/ServerConfig.json
-docker cp /tmp/ServerConfig.json jackett:/config/Jackett/ServerConfig.json > /dev/null
+docker cp /tmp/ServerConfig.json jackettio_jackett:/config/Jackett/ServerConfig.json > /dev/null
 rm -f /tmp/ServerConfig.json
 runDockerCompose down
 
